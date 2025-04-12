@@ -6,29 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.Administration.Entities.User;
-import com.example.Administration.Repositories.UserRepository;
+import com.example.Administration.Entities.Empresa;
+import com.example.Administration.Repositories.EmpresaRepository;
 
 @Service
-public class UserService {
+public class EmpresaService {
     
     @Autowired
-    private UserRepository repo;
+    private EmpresaRepository repo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User register(User user){
+    public Empresa register(Empresa user){
         user.setPassword(passwordEncoder.encode(user.getPassword())); //Encriptamos la contraseña con BCrypt
         return repo.save(user);
     }
 
-    public Optional<User> login(String email, String password){ 
+    public Optional<Empresa> login(String email, String password){ 
         return repo.findByEmail(email)
             .filter(user -> passwordEncoder.matches(password, user.getPassword())); //Comparamos la contraseña Encriptada con la que nos llega por el Login
     }
 
-    public Optional<User> findEmail(String email){
+    public Optional<Empresa> findEmail(String email){
         return repo.findByEmail(email);
     }
 }
