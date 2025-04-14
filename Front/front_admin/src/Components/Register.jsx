@@ -2,9 +2,9 @@ import authService from "../Services/authService";
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => { //Es un Componente de Registro
+const Register = () => {                                                        //Es un Componente de Registro
 
-    const navigate = useNavigate(); //Esta es una funcion que nos permite navegar entre ruas
+    const navigate = useNavigate();                                             //Esta es una funcion que nos permite navegar entre ruas
 
     const [Form, setForm] = useState({
         name: "",
@@ -14,17 +14,22 @@ const Register = () => { //Es un Componente de Registro
 
     const [error, setError] = useState("");
 
-    const handleChange = (e) => { //Esta funcion se encarga de actualizar el estado del formulario
-        setForm({...Form, [e.target.name]: e.target. value}); //Esto actualiza el estado del formulario con el valor del input que se esta modificando
+    const handleChange = (e) => {                                               //Esta funcion se encarga de actualizar el estado del formulario
+        setForm({...Form, [e.target.name]: e.target. value});                   //Esto actualiza el estado del formulario con el valor del input que se esta modificando
     };
 
-    const handleSubmit = async (e) => { //Esta funcion se encarga de Enviar el Formulario
-        e.preventDefault(); //Esto Evita que la pagina se recargue al enviar el formulario
+    const handleSubmit = async (e) => {                                         //Esta funcion se encarga de Enviar el Formulario
+        e.preventDefault();                                                     //Esto Evita que la pagina se recargue al enviar el formulario
         try {
             await authService.Create(Form);
             navigate("/login");
         } catch (error) {
-            setError("Hubo un Error al registrarse.");
+            if (error.response && error.response.data) {
+                setError(error.response.data);
+            } else {
+                setError("Hubo un Error al registrarse.");
+            }
+            
             console.error(error);
         }
     };
