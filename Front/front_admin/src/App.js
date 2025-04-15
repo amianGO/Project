@@ -1,5 +1,7 @@
 import Register from './Components/Register';
 import Login from './Components/Login';
+import Usuarios from './Pages/Usuarios';
+import PrivateRoute from './Components/PrivateRoute';
 import { Routes, Route, NavLink } from 'react-router-dom';
 
 function App() {
@@ -15,6 +17,10 @@ function App() {
       <Routes>
         <Route path='/login' element ={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
+        <Route path='/usuarios' element={
+          <PrivateRoute>
+          <Usuarios />
+          </PrivateRoute>} />
       </Routes>
     </div>
   );

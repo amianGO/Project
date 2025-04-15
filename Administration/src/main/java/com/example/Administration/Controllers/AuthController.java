@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Administration.DTO.LoginDTO;
+import com.example.Administration.DTO.LoginResponseDTO;
 import com.example.Administration.DTO.RegisterDTO;
 import com.example.Administration.Entities.Empresa;
 import com.example.Administration.Services.EmpresaService;
@@ -36,7 +37,8 @@ public class AuthController {                                                   
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){                                 //Es un Metodo para Login, que utiliza ResponseEntity para devolver una respuesta HTTP
         try {
             Empresa empresa = EmpresaService.login(loginDTO);
-            return ResponseEntity.ok(empresa);
+            LoginResponseDTO response = new LoginResponseDTO("Login Exitoso", empresa);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

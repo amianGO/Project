@@ -14,7 +14,7 @@ const authService = { //Esto es un Objeto que contiene funciones, Encargado de h
 
     Login: async (credentials) => { //Esta funcion es la Encargada de Iniciar sesion con el usuario Existente
       try {
-        const response = await axiosInstance.post("/auth/login", credentials);
+        const response = await axiosInstance.post("/auth/login", credentials);        
         return response.data;
       } catch (error) {
         console.error(error);

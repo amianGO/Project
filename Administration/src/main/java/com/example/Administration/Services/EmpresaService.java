@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.Administration.DTO.LoginDTO;
 import com.example.Administration.DTO.RegisterDTO;
+import com.example.Administration.DTO.UserDTO;
 import com.example.Administration.Entities.Empresa;
-import com.example.Administration.Entities.Usuario;
 import com.example.Administration.Repositories.EmpresaRepository;
 
 @Service
@@ -20,6 +20,9 @@ public class EmpresaService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     public Empresa register(RegisterDTO registerDTO){
 
@@ -33,9 +36,17 @@ public class EmpresaService {
         empresa.setName(registerDTO.getName());
         empresa.setPassword(passwordEncoder.encode(registerDTO.getPassword())); //Encriptamos la contraseña con BCrypt
 
-        
+        Empresa savedEmpresa = repo.save(empresa);
 
-        return repo.save(empresa);
+        //Crear el Primer Usuario asociado a la Empresa
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(registerDTO.getEmail());
+        userDTO.setName(registerDTO.getName());
+        userDTO.setPassword(registerDTO.getPassword()); //Sin encriptar, el user service se encarga de hacerlo
+
+        userService.createFirstUser(userDTO, savedEmpresa);
+
+        return savedEmpresa;
     }
 
     public Empresa login(LoginDTO loginDTO){ 

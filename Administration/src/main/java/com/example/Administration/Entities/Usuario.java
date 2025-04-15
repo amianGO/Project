@@ -2,6 +2,9 @@ package com.example.Administration.Entities;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,6 +30,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    private String name;
     private String password;
     private Long license;
 
@@ -36,10 +40,11 @@ public class Usuario {
     private Integer phone;
     private String adress;
 
-    @Enumerated(EnumType.STRING )
+    @Enumerated(EnumType.STRING)
     private Rol rol;
 
     @ManyToOne
-    @JoinColumn(name = "usuarios_id") //LLave Foranea de la tabla 
+    @JoinColumn(name = "empresa_id") //LLave Foranea de la tabla 
+    @JsonBackReference
     private Empresa empresa;
 }

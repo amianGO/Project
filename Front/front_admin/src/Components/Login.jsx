@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import authService from "../Services/authService";
 
 const Login  = () => {                                                      //Componente de Login
+
+    const navigate = useNavigate();
     const [credentials, setCredentials] = useState({                        //Estado para guardar las credenciales
         email:"",
         password: "",
@@ -22,7 +25,12 @@ const Login  = () => {                                                      //Co
             const response = await authService.Login(credentials);          //Llamar al servicio de autenticacion
             console.log("Login Exitoso: ", response);
             setMessage("Inicio de Sesion Exitoso");
+
+            localStorage.setItem("auth","true"); //Guardamos la autenticacion
+            localStorage.setItem("empresa",JSON.stringify(response.empresa));
+
             //Aqui guardaremos el Token, redirigir, etc.
+            navigate('/usuarios');
         } catch (error) {
             console.error("Error al Iniciar Sesion: ", error);
             setMessage("Credenciales Incorrectas");
