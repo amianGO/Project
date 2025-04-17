@@ -2,27 +2,26 @@ import Register from './Components/Register';
 import Login from './Components/Login';
 import Usuarios from './Pages/Usuarios';
 import PrivateRoute from './Components/PrivateRoute';
-import { Routes, Route, NavLink } from 'react-router-dom';
+import {Routes, Route, NavLink, BrowserRouter } from 'react-router-dom';
+import HomePage from './Pages/Home';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>
-        Inicio de Sesion
-      </h1>
-      <nav style={{marginBottom: "1rem"}}>
-        <NavLink to="/login" style={{marginRight: "1rem"}}>Login</NavLink>
-        <NavLink to="/register" style={{marginRight: "1rem"}}>Register</NavLink>
-      </nav>
+    <BrowserRouter>
       <Routes>
+        <Route path='/' element= {<HomePage/>}/>
         <Route path='/login' element ={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
+
         <Route path='/usuarios' element={
           <PrivateRoute>
           <Usuarios />
-          </PrivateRoute>} />
+          </PrivateRoute>
+        } />
+
       </Routes>
-    </div>
+      </BrowserRouter>  
+    
   );
 }
 

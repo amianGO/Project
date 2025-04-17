@@ -37,6 +37,7 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
                 .cors(cors -> corsConfigurationSource()) //Activa la configuracion de CORS para permitir el acceso a la API desde el Frontend
                 .authorizeHttpRequests(requests -> requests //Permite las Peticiones con http
                         .requestMatchers("/api/auth/**").permitAll() //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
+                        .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()) //Cualquier otra peticion necesita aitenticacion
                 .httpBasic(basic -> basic.disable())  //Desactiva la autenticacion Basica
                 .formLogin(login -> login.disable()); //Desactiva el Login predeterminado del Framework

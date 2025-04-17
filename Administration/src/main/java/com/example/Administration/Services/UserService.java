@@ -1,5 +1,8 @@
 package com.example.Administration.Services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,4 +34,23 @@ public class UserService {
         return userRepository.save(usuario);
         
     }
+
+    public Usuario createUser(Usuario usuario){
+        Optional<Usuario> optionalUser = userRepository.findByName(usuario.getName());
+        if (optionalUser.isPresent()) {
+            throw new RuntimeException("El usuario ya esta registrado.");
+        }
+        usuario.setPassword( passwordEncoder.encode(usuario.getPassword()));
+        return userRepository.save(usuario);
+    }
+
+    public List<Usuario> getAllUsers(){
+        List<Usuario> usuarios = userRepository.findAll();
+        if (usuarios.isEmpty()) {
+            throw new RuntimeException("No hay usuarios Registrados");
+        }
+        return usuarios;
+    }
+
+
 }
