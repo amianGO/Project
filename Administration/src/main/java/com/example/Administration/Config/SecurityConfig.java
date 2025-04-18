@@ -2,21 +2,30 @@ package com.example.Administration.Config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.example.Administration.Components.JwtAuthFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig { //Es una clase de configuracion de seguridad 
+    
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){                           //CORS configuration
@@ -38,9 +47,9 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
                 .authorizeHttpRequests(requests -> requests //Permite las Peticiones con http
                         .requestMatchers("/api/auth/**").permitAll() //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
                         .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated()) //Cualquier otra peticion necesita aitenticacion
-                .httpBasic(basic -> basic.disable())  //Desactiva la autenticacion Basica
-                .formLogin(login -> login.disable()); //Desactiva el Login predeterminado del Framework
+                        .anyRequest().authenticated() //Cualquier otra peticion necesita aitenticacion
+                    ) 
+                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); //Agrega el filtro JWT
 
         return http.build(); //Construye el Objeto con la configuracion de seguridad
     }
@@ -48,5 +57,10 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
     @Bean
     public PasswordEncoder passwordEncoder(){ //Este metodo se encarga de la configuracion del PasswordEncoder
         return new BCryptPasswordEncoder(); //Es utilizado para Encriptar la contraseña de los usuarios
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+        return config.getAuthenticationManager();
     }
 }

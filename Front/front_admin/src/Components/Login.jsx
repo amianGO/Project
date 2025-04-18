@@ -26,7 +26,7 @@ const Login  = () => {                                                      //Co
             console.log("Login Exitoso: ", response);
             setMessage("Inicio de Sesion Exitoso");
 
-            localStorage.setItem("auth","true"); //Guardamos la autenticacion
+            localStorage.setItem("token", response.token); //Guardamos la autenticacion
             localStorage.setItem("empresa",JSON.stringify(response.empresa));
 
             //Aqui guardaremos el Token, redirigir, etc.
