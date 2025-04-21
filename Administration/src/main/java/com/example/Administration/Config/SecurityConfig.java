@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,7 @@ import com.example.Administration.Components.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig { //Es una clase de configuracion de seguridad 
     
     @Autowired
@@ -32,8 +34,9 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
         CorsConfiguration configuration = new CorsConfiguration();                      //Permitir el accesi a la API desde ek frontend
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));           //URL del frontend
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); //Metodos permitidos
-        configuration.setAllowedHeaders(List.of("*"));                               //Cabeceras Permitidas
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));                               //Cabeceras Permitidas
         configuration.setAllowCredentials(true);                       //Permitir Credenciales
+        configuration.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); //Configuracion de la URL
         source.registerCorsConfiguration("/**", configuration);                 //Permitir el acceso a todas las URL
         return source;
@@ -47,6 +50,7 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
                 .authorizeHttpRequests(requests -> requests //Permite las Peticiones con http
                         .requestMatchers("/api/auth/**").permitAll() //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
                         .requestMatchers("/").permitAll()
+                        //.requestMatchers("/api/empresa").authenticated()
                         .anyRequest().authenticated() //Cualquier otra peticion necesita aitenticacion
                     ) 
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); //Agrega el filtro JWT

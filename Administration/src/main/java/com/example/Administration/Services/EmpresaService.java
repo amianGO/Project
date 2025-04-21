@@ -1,5 +1,6 @@
 package com.example.Administration.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import com.example.Administration.DTO.LoginDTO;
 import com.example.Administration.DTO.RegisterDTO;
 import com.example.Administration.DTO.UserDTO;
 import com.example.Administration.Entities.Empresa;
+import com.example.Administration.Entities.Rol;
+import com.example.Administration.Entities.Usuario;
 import com.example.Administration.Repositories.EmpresaRepository;
 
 @Service
@@ -34,6 +37,7 @@ public class EmpresaService {
 
         empresa.setEmail(registerDTO.getEmail());
         empresa.setName(registerDTO.getName());
+        empresa.setRol(Rol.ROLE_EMPRESA);
         empresa.setPassword(passwordEncoder.encode(registerDTO.getPassword())); //Encriptamos la contraseña con BCrypt
 
         Empresa savedEmpresa = repo.save(empresa);
@@ -63,6 +67,12 @@ public class EmpresaService {
         }
 
         return empresa;
+    }
+
+    public List<Usuario> getUsersByEmpresa(Long empresaId){
+        Empresa empresa = repo.findById(empresaId)
+            .orElseThrow(() -> new RuntimeException("Empresa no Encontrada"));
+        return empresa.getEmpleados();
     }
 
     public Optional<Empresa> findEmail(String email){

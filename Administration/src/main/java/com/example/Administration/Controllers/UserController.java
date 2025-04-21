@@ -9,14 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Administration.Entities.Usuario;
+import com.example.Administration.Services.EmpresaService;
 import com.example.Administration.Services.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
     
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmpresaService EmpresaService;
 
     @GetMapping("/list")
     public ResponseEntity<List<Usuario>> getAllUsers(){

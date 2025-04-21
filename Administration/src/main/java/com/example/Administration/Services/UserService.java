@@ -49,6 +49,7 @@ public class UserService {
         if (usuarios.isEmpty()) {
             throw new RuntimeException("No hay usuarios Registrados");
         }
+        System.out.println(usuarios);
         return usuarios;
     }
 

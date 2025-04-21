@@ -5,9 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import com.example.Administration.Entities.Empresa;
 
+
 import java.util.Optional;
 
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
     Optional<Empresa> findByEmail(String email);
+    
 }
