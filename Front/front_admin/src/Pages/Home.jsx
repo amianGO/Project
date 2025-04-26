@@ -5,9 +5,9 @@ import { Navigate } from "react-router-dom";
 
 const HomePage = () => {
     const handleLogout = () => {
-        localStorage.removeItem("auth");
+        localStorage.removeItem("token");
         localStorage.removeItem("empresa");
-        <Navigate to="/" replace/>;
+        <Navigate to="/login" replace/>;
 
     }
 

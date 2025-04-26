@@ -46,7 +46,7 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{        //Este metodo se encarga de la configuracion de seguridad de la aplicacion
         http 
                 .csrf(csrf -> csrf.disable()) //Desactiva la proteccion CSRF para permitir el acceso a la API desde el Frontend
-                .cors(cors -> corsConfigurationSource()) //Activa la configuracion de CORS para permitir el acceso a la API desde el Frontend
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) //Activa la configuracion de CORS para permitir el acceso a la API desde el Frontend
                 .authorizeHttpRequests(requests -> requests //Permite las Peticiones con http
                         .requestMatchers("/api/auth/**").permitAll() //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
                         .requestMatchers("/").permitAll()
