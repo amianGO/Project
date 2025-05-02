@@ -2,19 +2,25 @@ package com.example.Administration.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.Administration.DTO.UserDTO;
 import com.example.Administration.Entities.Empresa;
 import com.example.Administration.Entities.Rol;
 import com.example.Administration.Entities.Usuario;
+import com.example.Administration.Repositories.EmpresaRepository;
 import com.example.Administration.Repositories.UserRepository;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private EmpresaRepository repo;
 
     @Autowired
     private UserRepository userRepository;
@@ -51,6 +57,20 @@ public class UserService {
         }
         System.out.println(usuarios);
         return usuarios;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO> getUsersByEmpresa(Long id){
+        Empresa empresa = repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Empresa no Encontrada"));
+            
+        return empresa.getEmpleados().stream()
+            .map(usuario -> new UserDTO(usuario))
+            .collect(Collectors.toList());
+    }
+
+    public Optional<Empresa> findEmail(String email){
+        return repo.findByEmail(email);
     }
 
 

@@ -1,10 +1,13 @@
 package com.example.Administration.Services;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,17 +16,22 @@ import io.jsonwebtoken.security.Keys;
 //Generar y validad el Token
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "KGAWO7Xt9uLvESscuhll686ptFYu+/Y+hiFLX4gu20LnsXwLayoRysmpCtd/HR4glWxZGaNeaKqnXy3xMQdclA==";
+    private final String SECRET_KEY = "fyXe1OhDNClvt33MPSiuXr1Lzkuu6FUokenZEjQyYhGuhyaoGVUKnw67R4jNRSgyzNdVaI0BpN-d7KKZCAOBtQ";
 
     private Key getSignKey(){
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Base64.getUrlDecoder().decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     //Generar el Token
-    public String generateToken(String email){
+    public String generateToken(UserDetails userDetails){
         return Jwts.builder()
-            .setSubject(email)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setSubject(userDetails.getUsername())
+            .claim("role", userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER"))
+            .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
             .signWith(getSignKey(), SignatureAlgorithm.HS512)
             .compact();

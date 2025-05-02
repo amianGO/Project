@@ -3,7 +3,7 @@ package com.example.Administration.Entities;
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,5 +46,6 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "empresa_id") //LLave Foranea de la tabla 
     @JsonBackReference
+    @JsonIgnore
     private Empresa empresa;
 }

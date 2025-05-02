@@ -17,7 +17,7 @@ public class AdministrationApplication {
 		System.out.println("Hola Mundo");
 
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-		System.out.println(Encoders.BASE64.encode(key.getEncoded()));
+		System.out.println("Clave segura " + Encoders.BASE64URL.encode(key.getEncoded()));
 	}
 
 }

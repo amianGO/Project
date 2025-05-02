@@ -8,11 +8,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Administration.Components.EmpresaMapper;
 import com.example.Administration.DTO.LoginDTO;
 import com.example.Administration.DTO.RegisterDTO;
 import com.example.Administration.Entities.Empresa;
@@ -29,6 +31,9 @@ public class AuthController {                                                   
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private EmpresaMapper empresaMapper;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO){                        //Es un Metodo para Registrar un nuevo usuario, que utillizar ResponseEntity para devolver una Respuesta HTTP
         try {
@@ -43,7 +48,9 @@ public class AuthController {                                                   
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){                                 //Es un Metodo para Login, que utiliza ResponseEntity para devolver una respuesta HTTP
         try {
             Empresa empresa = EmpresaService.login(loginDTO);
-            String token = jwtService.generateToken(empresa.getEmail());
+            
+            UserDetails userDetails = empresaMapper.toUserDetails(empresa);        
+            String token = jwtService.generateToken(userDetails);
             
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);

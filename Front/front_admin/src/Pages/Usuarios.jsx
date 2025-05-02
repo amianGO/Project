@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from "react";
-import UserService from "../Services/userService";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import EmpresaService from "../Services/empresaService";
+import {useNavigate } from "react-router-dom";
 
 const Usuarios = () => {
 
@@ -11,7 +11,7 @@ const Usuarios = () => {
     const [usuario, setUsuario] = useState([]); //Estado para almacenar la lista de Usuarios
     const [loading, setLoading] = useState(true); //Estado para manejar la carga de datos
     const [error, setError] = useState(null); //Estado para manejar erroress
-
+    const [hasFetched, setHasFetched] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {       //Efecto para cargar los usuarios cuando el componente se monta
@@ -19,11 +19,17 @@ const Usuarios = () => {
         const fetchUsers = async () => {
             try {
                 setLoading(true);
-                
-                const data = await UserService.getAll();
-                console.log(data)
-                setUsuario(data);
-                setError(null);
+                if (!empresa.id || hasFetched) return;
+
+                if (!empresa.id) {
+                    navigate("/login");
+                }
+
+
+                const data = await EmpresaService.getAllUsers(empresa?.id);
+                console.log("Usuarios Obtenidos: ", data)
+
+                setUsuario(data || []);
             } catch (err) {
                 console.error("Error al cargar los usuarioss", err);
                 setError("No se pudieron cargar los usuarios, Intenta Nuevamente");
@@ -32,35 +38,29 @@ const Usuarios = () => {
             }
 
         };
-
+        console.log("Ejecuntando useEffect, Empresa: " , empresa);
         fetchUsers();
-    },[])
+        setHasFetched(true)
+    },[empresa?.id]);
 
+    if (loading) return <p>Cargando Usuarios</p>;
+    if (error) return <p style={{color: "red"}}>{error}</p>
     return(
 
-    <div style={{ padding: "1rem" }}>
+        <div style={{ padding: "1rem" }}>
         <h2>Usuarios de {empresa?.name ?? "Empresa no disponible"}</h2>
-
-        {loading && <p>Cargando usuarios...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        {!loading && !error && (
+        {usuario.length > 0 ? (
             <ul>
-            {usuario.map(user => (
-                <li key={user._id}>
-                {user.name} - {user.email}
-                </li>
-            ))}
+                {usuario.map((user) => (
+                    <li key={user.id}>
+                        {user.name} - {user.email}
+                    </li>
+                ))}
             </ul>
+        ) : (
+            <p>No hay usuarios registrados</p>
         )}
     </div>
-        /*
-        <div>
-            <h1>{empresa?.name ?? "Nombre no Disponible"}</h1>
-            <p>Aqui Veremos los Usuarios de la Empresa</p>
-        </div>
-        */
-        
 
     )
 }
