@@ -48,16 +48,16 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{        //Este metodo se encarga de la configuracion de seguridad de la aplicacion
         http 
-                .csrf(csrf -> csrf.disable()) //Desactiva la proteccion CSRF para permitir el acceso a la API desde el Frontend
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) //Activa la configuracion de CORS para permitir el acceso a la API desde el Frontend
-                .authorizeHttpRequests(requests -> requests //Permite las Peticiones con http
-                        .requestMatchers("/api/auth/**").permitAll() //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
+                .csrf(csrf -> csrf.disable())                                         //Desactiva la proteccion CSRF para permitir el acceso a la API desde el Frontend
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))    //Activa la configuracion de CORS para permitir el acceso a la API desde el Frontend
+                .authorizeHttpRequests(requests -> requests                           //Permite las Peticiones con http
+                        .requestMatchers("/api/auth/**").permitAll()      //Permite el acceso a la API de autenticacion sin necesidad de estar autenticado
                         .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated() //Cualquier otra peticion necesita aitenticacion
+                        .anyRequest().authenticated()                                 //Cualquier otra peticion necesita aitenticacion
                         
                     ) 
                     .exceptionHandling(e -> e 
-                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //Manejo de excepsiones para el accesop no autorizado
                     .accessDeniedHandler((request, response, accesDeniedException) -> {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         response.getWriter().write("{\"message\": \"Acceso Denegado\"}");
@@ -66,16 +66,16 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
                     .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); //Agrega el filtro JWT
 
-        return http.build(); //Construye el Objeto con la configuracion de seguridad
+        return http.build();                                                            //Construye el Objeto con la configuracion de seguridad
     }
     
     @Bean
-    public PasswordEncoder passwordEncoder(){ //Este metodo se encarga de la configuracion del PasswordEncoder
-        return new BCryptPasswordEncoder(); //Es utilizado para Encriptar la contraseña de los usuarios
+    public PasswordEncoder passwordEncoder(){                                           //Este metodo se encarga de la configuracion del PasswordEncoder
+        return new BCryptPasswordEncoder();                                             //Es utilizado para Encriptar la contraseña de los usuarios
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{ //Metodo que Se encarga de autenticar la empresa
+        return config.getAuthenticationManager();                                       //Se encarga de autenticar la empresa
     }
 }

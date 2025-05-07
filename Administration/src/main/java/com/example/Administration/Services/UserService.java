@@ -17,7 +17,7 @@ import com.example.Administration.Repositories.EmpresaRepository;
 import com.example.Administration.Repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService {                                                  //Esta clase es la encargada de gestiornar la logica para los usuarios
 
     @Autowired
     private EmpresaRepository repo;
@@ -28,8 +28,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario createFirstUser(UserDTO userDTO, Empresa empresa){
-        Usuario usuario = new Usuario();
+    public Usuario createFirstUser(UserDTO userDTO, Empresa empresa){       //Con este metodo crearemos el primer usuario, recibe el DTO y la empresa a la que pertenece
+        Usuario usuario = new Usuario();                                    //Creamos un nuevo usuario
 
         usuario.setEmail(userDTO.getEmail());
         usuario.setName(userDTO.getName());
@@ -41,17 +41,17 @@ public class UserService {
         
     }
 
-    public Usuario createUser(Usuario usuario){
-        Optional<Usuario> optionalUser = userRepository.findByName(usuario.getName());
+    public Usuario createUser(Usuario usuario){                                //Con este metodo crearemos un nuevo usuarios, el cual utiliza como argumento la entidad correspondiente
+        Optional<Usuario> optionalUser = userRepository.findByName(usuario.getName()); //Buscamos si el usuario ya existe en la base de datos
         if (optionalUser.isPresent()) {
             throw new RuntimeException("El usuario ya esta registrado.");
         }
-        usuario.setPassword( passwordEncoder.encode(usuario.getPassword()));
+        usuario.setPassword( passwordEncoder.encode(usuario.getPassword()));    //Encriptamos la contraseña del usuario
         return userRepository.save(usuario);
     }
 
-    public List<Usuario> getAllUsers(){
-        List<Usuario> usuarios = userRepository.findAll();
+    public List<Usuario> getAllUsers(){                                         //Con este metodo obtendremos todos los usuarios creados en la base de datos
+        List<Usuario> usuarios = userRepository.findAll();                      //Buscamos todos los usuarios en la base de datos
         if (usuarios.isEmpty()) {
             throw new RuntimeException("No hay usuarios Registrados");
         }
@@ -60,13 +60,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserDTO> getUsersByEmpresa(Long id){
-        Empresa empresa = repo.findById(id)
+    public List<UserDTO> getUsersByEmpresa(Long id){                            //Con este metodo buscaremos todos los usuarios de una empresa en especifico, recibe como argumento el id de la empresa
+        Empresa empresa = repo.findById(id)                                     //Buscamos la empresa en la base de datos
             .orElseThrow(() -> new RuntimeException("Empresa no Encontrada"));
             
-        return empresa.getEmpleados().stream()
-            .map(usuario -> new UserDTO(usuario))
-            .collect(Collectors.toList());
+        return empresa.getEmpleados().stream()                                  //Obtenemos todos los empleados de la empresa y lo convertimos a un DTO
+            .map(usuario -> new UserDTO(usuario))                               //mapeamos el usuario al DTO
+            .collect(Collectors.toList());                                      //collect funciona como un tolist, que convierte el stream en una lista
     }
 
     public Optional<Empresa> findEmail(String email){
