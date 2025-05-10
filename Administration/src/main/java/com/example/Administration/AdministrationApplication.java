@@ -13,11 +13,13 @@ import io.jsonwebtoken.security.Keys;
 public class AdministrationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AdministrationApplication.class, args);
+		
 		System.out.println("Hola Mundo");
 
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 		System.out.println("Clave segura " + Encoders.BASE64URL.encode(key.getEncoded()));
+
+		SpringApplication.run(AdministrationApplication.class, args);
 	}
 
 }

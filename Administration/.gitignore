@@ -33,5 +33,5 @@ build/
 .vscode/
 
 #Ignore Custom dev Properties
-src/main/resources/application-dev.properties
+env.properties
 
