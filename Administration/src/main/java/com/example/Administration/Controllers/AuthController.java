@@ -45,17 +45,17 @@ public class AuthController {                                                   
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){                                 //Es un Metodo para Login, que utiliza ResponseEntity para devolver una respuesta HTTP
+    public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){                  //Es un Metodo para Login, que utiliza ResponseEntity para devolver una respuesta HTTP
         try {
-            Empresa empresa = EmpresaService.login(loginDTO);                                       //Se encarga de realizar el login y devulve la Empresa
+            Empresa empresa = EmpresaService.login(loginDTO);                         //Se encarga de realizar el login y devulve la Empresa
             
-            UserDetails userDetails = empresaMapper.toUserDetails(empresa);                         //Convierte la empresa en UserDetails
-            String token = jwtService.generateToken(userDetails);                                   //Genera el token a partir de los detalles del usuario
+            UserDetails userDetails = empresaMapper.toUserDetails(empresa);           //Convierte la empresa en UserDetails
+            String token = jwtService.generateToken(userDetails);                     //Genera el token a partir de los detalles del usuario
             
-            Map<String, Object> response = new HashMap<>();                                         //Creamos un mapa para almacenar la respuesta
+            Map<String, Object> response = new HashMap<>();                           //Creamos un mapa para almacenar la respuesta
             response.put("token", token);
             response.put("empresa", empresa);
-        
+            
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
