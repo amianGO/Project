@@ -28,10 +28,10 @@ public class JwtService { //Esta clase es la encargada de generar la logica para
     public String generateToken(UserDetails userDetails){               //Esta funcion es la encargada de generar el token, recibiendo los datos de UserDetails
         return Jwts.builder()                                           //Esta funcion es la encargada de construir el token
             .setSubject(userDetails.getUsername())                      //setSubject asigna el eamil al token
-            .claim("role", userDetails.getAuthorities().stream()   // esta funcion se encarga de obtener el rol de la empresa
+            .claim("role", userDetails.getAuthorities().stream()        // esta funcion se encarga de obtener el rol de la empresa
                 .findFirst()                                            // Busca el primer rol del usuario
                 .map(GrantedAuthority::getAuthority)                    //Obtiene el rol de la emoresa
-                .orElse("ROLE_USER"))                             //Asigna el rol en caso de que no lo tenga
+                .orElse("ROLE_USER"))                                   //Asigna el rol en caso de que no lo tenga
             .setIssuedAt(new Date())                                    //Asigna la fecha de emision del token
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //Asigna la fecha de expiracion del token, en este caso 24 horas
             .signWith(getSignKey(), SignatureAlgorithm.HS512)           //Asigna la firma del token, en este caso bajo HS512
