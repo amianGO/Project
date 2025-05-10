@@ -19,7 +19,16 @@ public class AdministrationApplication {
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 		System.out.println("Clave segura " + Encoders.BASE64URL.encode(key.getEncoded()));
 
-		SpringApplication.run(AdministrationApplication.class, args);
+		// Usar Spring Boot para acceder a las variables de entorno
+        String dbUrl = System.getenv("DB_URL");
+        String dbUser = System.getenv("DB_USER");
+        String dbPass = System.getenv("DB_PASS");
+
+        System.out.println("DB_URL: " + dbUrl);
+        System.out.println("DB_USER: " + dbUser);
+        System.out.println("DB_PASS: " + dbPass);
+
+        SpringApplication.run(AdministrationApplication.class, args);
 	}
 
 }
