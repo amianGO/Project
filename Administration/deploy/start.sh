@@ -1,0 +1,1 @@
+java -jar Administration-0.0.1-SNAPSHOT.jar
