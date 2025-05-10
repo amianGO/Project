@@ -30,18 +30,18 @@ public class JwtAuthFilter extends OncePerRequestFilter{                        
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    @Override
-    protected boolean shouldNotFilter(@SuppressWarnings("null") HttpServletRequest request) throws ServletException{    //Esta funcion se encarga de verificar si la peticion no es de autenticacion, en este caso si la peticion no es de autenticacion, no se filtra
-        String path = request.getServletPath();                                     //Esta funcion se encarga de obtener la URL 
-        return path.startsWith("/api/auth");                                 //Esta funcion se encarga de verificar si la URL empieza con /api/auth, en este caso no se filtra
-    }
-
     @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)                        //Esta funcion se encarga de realizar la peticion y validar el token
                                     throws ServletException, IOException{
+        String path = request.getServletPath();
+        if (path.startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String authHeader = request.getHeader("Authorization");                //Esta funcion se encarga de obtener la cabecera de autorizacion del request, en este caso del token
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {       //Esta funcion se encarga de verificar si la cabecera de autorizacion es nula o no empieza con Bearer, en este caso no se filtra
             filterChain.doFilter(request, response); 
