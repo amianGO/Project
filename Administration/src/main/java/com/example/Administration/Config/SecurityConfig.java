@@ -35,7 +35,7 @@ public class SecurityConfig { //Es una clase de configuracion de seguridad
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){                           //CORS configuration
         CorsConfiguration configuration = new CorsConfiguration();                      //Permitir el accesi a la API desde ek frontend
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));           //URL del frontend
+        configuration.setAllowedOrigins(List.of("https://project-flame-eight-33.vercel.app"));           //URL del frontend
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); //Metodos permitidos
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));                               //Cabeceras Permitidas
         configuration.setAllowCredentials(true);                       //Permitir Credenciales
