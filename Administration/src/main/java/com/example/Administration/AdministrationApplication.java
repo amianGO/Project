@@ -20,13 +20,13 @@ public class AdministrationApplication {
 		System.out.println("Clave segura " + Encoders.BASE64URL.encode(key.getEncoded()));
 
 		// Usar Spring Boot para acceder a las variables de entorno
-        String dbUrl = System.getenv("DB_URL");
-        String dbUser = System.getenv("DB_USER");
-        String dbPass = System.getenv("DB_PASS");
+        String dbUrl = System.getenv("DATABASE_PUBLIC_URL");
+        String dbUser = System.getenv("PGUSER");
+        String dbPass = System.getenv("PGPASSWORD");
 
-        System.out.println("DB_URL: " + dbUrl);
-        System.out.println("DB_USER: " + dbUser);
-        System.out.println("DB_PASS: " + dbPass);
+        System.out.println("DATABASE_PUBLIC_URL: " + dbUrl);
+        System.out.println("PGUSER: " + dbUser);
+        System.out.println("PGPASSWORD: " + dbPass);
 
         SpringApplication.run(AdministrationApplication.class, args);
 	}
