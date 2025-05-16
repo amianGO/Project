@@ -50,13 +50,14 @@ const Usuarios = () => {
         <div style={{ padding: "1rem" }}>
         <h2>Usuarios de {empresa?.name ?? "Empresa no disponible"}</h2>
         {usuario.length > 0 ? (
-            <ul>
+            <div className="user-grid">
                 {usuario.map((user) => (
-                    <li key={user.id}>
-                        {user.name} - {user.email}
-                    </li>
+                    <div key={user.id} className="user-card">
+                        <h3>{user.name}</h3>
+                        <p>{user.email}</p>
+                    </div>
                 ))}
-            </ul>
+            </div>
         ) : (
             <p>No hay usuarios registrados</p>
         )}
